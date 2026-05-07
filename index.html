@@ -779,6 +779,7 @@ const DESCRIPTIONS = {
   '独自上场': '中国网球运动员李娜的传记。记录这位湖北姑娘如何从单飞争议到夺得法网冠军，以个人勇气对抗体制惯性，成为亚洲网球历史上最具影响力的运动员之一。',
   '攀岩人生': '美国攀岩家汤米·考德威尔的回忆录。讲述他如何在失去左手食指后仍完成酋长岩黎明墙首攀，以及在吉尔吉斯斯坦被武装分子劫持的生死历险与内心蜕变。',
   '创造自然': '传记作家安德里娅·武尔夫所著，讲述博物学家亚历山大·冯·洪堡的一生。洪堡是第一个提出"自然是相互联系的整体"的科学家，被达尔文、爱默生等人奉为精神导师。',
+  '当你像鸟飞往你的山': '美国作家塔拉·韦斯特弗的回忆录。她在爱达荷州山区的末日主义家庭中长大，从未接受正规教育，却凭借自学考入大学，最终获得剑桥大学历史学博士学位。这是一部关于教育如何重塑自我、以及如何在家庭创伤中艰难脱身的深刻记录。',
 
   // ── 商业 ──────────────────────────────────────────
   '纳瓦尔宝典': '硅谷天使投资人纳瓦尔·拉维坎特的智慧箴言集。浓缩其关于如何通过"特定知识"实现财富自由、如何在冷静中找到幸福的核心理念，简洁而深刻。',
@@ -934,6 +935,7 @@ const DATA = [
         {subject:'李娜',             name:'独自上场'},
         {subject:'汤米·考德威尔',    name:'攀岩人生',                   original:"The Push: A Climber's Journey of Endurance, Risk, and Going Beyond Limits"},
         {subject:'亚历山大·冯·洪堡', name:'创造自然',                   original:"The Invention of Nature: Alexander von Humboldt's New World"},
+        {subject:'塔拉·韦斯特弗',   name:'当你像鸟飞往你的山',         original:'Educated: A Memoir'},
       ]},
     ]
   },
@@ -1316,12 +1318,20 @@ function findBook(name) {
   }
   return null;
 }
+function resetGeoView() {
+  const mv = document.getElementById('geoMapView'), lv = document.getElementById('geoListView');
+  if (!mv || !lv) return;
+  mv.classList.remove('hidden');
+  lv.classList.add('hidden');
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === 'map'));
+}
 function filterCat(cat, btn) {
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('searchInput').value = '';
   document.querySelectorAll('.section').forEach(s=>s.classList.toggle('hidden', cat!=='all'&&s.dataset.category!==cat));
   document.querySelectorAll('.book-item').forEach(i=>i.classList.remove('hidden'));
+  resetGeoView();
   updateCount();
 }
 function onSearch() {
@@ -1332,6 +1342,7 @@ function onSearch() {
   if (!q) {
     document.querySelectorAll('.book-item').forEach(i=>i.classList.remove('hidden'));
     document.getElementById('noResults').style.display='none';
+    resetGeoView();
     updateCount(); return;
   }
   const lv=document.getElementById('geoListView'), mv=document.getElementById('geoMapView');
@@ -1351,7 +1362,8 @@ function onSearch() {
 }
 function updateCount() {
   document.getElementById('totalCount').textContent=document.querySelectorAll('.book-item').length;
-  document.getElementById('visibleCount').textContent=document.querySelectorAll('.book-item:not(.hidden)').length;
+  const visible = [...document.querySelectorAll('.book-item:not(.hidden)')].filter(el=>!el.closest('.section').classList.contains('hidden'));
+  document.getElementById('visibleCount').textContent=visible.length;
 }
 function openModal(b, catLabel) {
   document.getElementById('mCat').textContent=catLabel;
