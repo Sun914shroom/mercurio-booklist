@@ -689,6 +689,111 @@ footer {
   .modal-box   { padding: 28px 22px 24px; }
   .stat-item   { padding: 12px 14px; }
 }
+
+/* ── Feedback floating button & modal ── */
+#feedbackBtn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 200;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .15s, box-shadow .15s;
+}
+#feedbackBtn:hover { transform: scale(1.08); box-shadow: 0 6px 18px rgba(0,0,0,.24); }
+
+.feedback-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 201;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.feedback-overlay.open { opacity: 1; pointer-events: all; }
+
+.feedback-box {
+  background: #f5f0e8;
+  border-radius: 14px;
+  padding: 32px 28px 28px;
+  width: min(480px, 92vw);
+  position: relative;
+  box-shadow: 0 12px 40px rgba(0,0,0,.25);
+}
+.feedback-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1;
+}
+.feedback-close:hover { color: var(--text); }
+.feedback-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.feedback-box label {
+  display: block;
+  font-size: 12px;
+  color: #7a7060;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 5px;
+  margin-top: 14px;
+}
+.feedback-box input,
+.feedback-box textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: #ebe6da;
+  border: 1px solid #cfc5b0;
+  border-radius: 7px;
+  padding: 9px 12px;
+  font-size: 14px;
+  color: #1a1410;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: border-color .15s;
+}
+.feedback-box input:focus,
+.feedback-box textarea:focus { border-color: #8b2e12; }
+.feedback-submit {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.feedback-submit:disabled { opacity: .55; cursor: default; }
+.feedback-error { color: #c0392b; font-size: 13px; margin-top: 10px; }
+.feedback-success { text-align: center; padding: 20px 0; color: var(--text); font-size: 15px; }
 </style>
 </head>
 <body>
@@ -727,6 +832,24 @@ footer {
 <div id="root"></div>
 <div class="no-results" id="noResults">未找到相关书目</div>
 <footer>整理 by 菇</footer>
+</div>
+<button id="feedbackBtn" onclick="openFeedback()" title="建议书目 / 纠错">✉️</button>
+<div class="feedback-overlay" id="feedbackOverlay" onclick="maybeFeedbackClose(event)">
+  <div class="feedback-box">
+    <button class="feedback-close" onclick="closeFeedback()">×</button>
+    <div class="feedback-title">有反馈？</div>
+    <div id="feedbackForm">
+      <form onsubmit="submitFeedback(event)">
+        <label for="fEmail">邮箱 / 星球ID</label>
+        <input id="fEmail" name="email" type="text" required placeholder="方便回复你">
+        <label for="fMessage">留言</label>
+        <textarea id="fMessage" name="message" rows="5" required placeholder="想补充的书、发现的错误..."></textarea>
+        <button class="feedback-submit" id="feedbackSubmitBtn" type="submit">发送</button>
+        <div class="feedback-error" id="feedbackError"></div>
+      </form>
+    </div>
+    <div class="feedback-success hidden" id="feedbackSuccess">✅ 已发送，感谢反馈！</div>
+  </div>
 </div>
 <div class="modal-overlay" id="overlay" onclick="maybeClose(event)">
   <div class="modal-box">
@@ -1383,7 +1506,55 @@ function openModal(b, catLabel) {
 }
 function closeModal(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
 function maybeClose(e){if(e.target===document.getElementById('overlay'))closeModal();}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+function openFeedback(){
+  document.getElementById('feedbackOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeFeedback(){
+  const ov=document.getElementById('feedbackOverlay');
+  ov.classList.remove('open');
+  document.body.style.overflow='';
+  document.getElementById('feedbackForm').classList.remove('hidden');
+  document.getElementById('feedbackSuccess').classList.add('hidden');
+  document.getElementById('feedbackError').textContent='';
+  document.getElementById('fEmail').value='';
+  document.getElementById('fMessage').value='';
+  document.getElementById('feedbackSubmitBtn').disabled=false;
+  document.getElementById('feedbackSubmitBtn').textContent='发送';
+}
+function maybeFeedbackClose(e){if(e.target===document.getElementById('feedbackOverlay'))closeFeedback();}
+async function submitFeedback(e){
+  e.preventDefault();
+  const btn=document.getElementById('feedbackSubmitBtn');
+  const errEl=document.getElementById('feedbackError');
+  btn.disabled=true;
+  btn.textContent='发送中…';
+  errEl.textContent='';
+  try{
+    const resp=await fetch('https://formspree.io/f/xojrkdab',{
+      method:'POST',
+      headers:{'Accept':'application/json','Content-Type':'application/json'},
+      body:JSON.stringify({
+        email:document.getElementById('fEmail').value,
+        message:document.getElementById('fMessage').value
+      })
+    });
+    if(resp.ok){
+      document.getElementById('feedbackForm').classList.add('hidden');
+      document.getElementById('feedbackSuccess').classList.remove('hidden');
+    } else {
+      errEl.textContent='发送失败，请稍后再试。';
+      btn.disabled=false;
+      btn.textContent='发送';
+    }
+  }catch(_){
+    errEl.textContent='网络错误，请检查连接后重试。';
+    btn.disabled=false;
+    btn.textContent='发送';
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeFeedback();}});
 render();
 </script>
 </body>
