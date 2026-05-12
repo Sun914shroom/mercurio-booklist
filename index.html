@@ -1005,6 +1005,8 @@ const DESCRIPTIONS = {
   '福楼拜作品': '法国作家古斯塔夫·福楼拜的作品。以《包法利夫人》开创现代写实主义，以"恰当词语"（le mot juste）为标准的写作美学，影响了此后整个欧洲乃至世界文学传统。',
 
   // ── 艺术/文化 ──────────────────────────────────────
+  '艺术与观念丛书': '每册聚焦一个艺术史核心议题——从古希腊罗马到印象派、从女性凝视到殖民主义。作者均为领域内知名学者，将作品置于具体的文化与思想背景中审视，兼顾学术深度与阅读趣味。',
+  '世界名画家全集丛书': '每册专注一位画家，从文艺复兴跨越至20世纪，涵盖达·芬奇、伦勃朗、塞尚、毕加索等数十位艺术家。以生平年表、创作脉络与作品精析为结构，适合按画家或流派专题阅读。',
   '古希腊罗马艺术为什么重要': '艺术史家以问题为导向重新审视古典艺术遗产。探讨希腊罗马的雕塑、绘画与建筑如何持续塑造西方审美与文化价值观，适合对古典艺术感兴趣的普通读者入门。',
   '叶嘉莹说汉魏六朝诗': '古典诗词学者叶嘉莹的诗歌讲义。以其"兴发感动"的诗学理论，深度解读曹操、陶渊明、谢灵运等人的代表作，引导读者进入汉魏六朝诗歌的精神世界。',
   '傅雷家书': '翻译家傅雷写给旅欧钢琴家儿子傅聪的书信集。字里行间传递父亲对艺术、人格、爱情与爱国的深沉思考，是中国现代文化史上最动人的家庭文献之一。',
@@ -1189,6 +1191,8 @@ const DATA = [
       {name:'论摄影',             original:'On Photography'},
       {name:'哈佛非虚构写作课',     original:'Telling True Stories: A Nonfiction Writers\' Guide from the Nieman Foundation at Harvard University'},
       {name:'外国文化名人自画像'},
+      {name:'艺术与观念丛书', doubanUrl:'https://book.douban.com/series/45454'},
+      {name:'世界名画家全集丛书', doubanUrl:'https://book.douban.com/series/156'},
     ]
   },
   {id:'sports', title:'运动 / 健康', emoji:'💪',
@@ -1229,6 +1233,7 @@ const MEDIA = {
     {name:'商务印书馆汉译名著系列',             url:'https://www.cp.com.cn/hysjwx/'},
     {name:'孤独星球系列（Lonely Planet）',      url:'https://www.lonelyplanet.com'},
     {name:'理想国M系列',                        url:'https://www.douban.com/doulist/109846541/'},
+    {name:'Taschen 艺术画册',                   url:'https://www.taschen.com/en/books/art/'},
   ],
 };
 
@@ -1495,8 +1500,12 @@ function openModal(b, catLabel) {
   const enEl=document.getElementById('mEn');enEl.textContent=b.original||'';enEl.style.display=b.original?'':'none';
   const meta=[b.subject,b.author].filter(Boolean).join(' · ');
   const metaEl=document.getElementById('mMeta');metaEl.textContent=meta;metaEl.style.display=meta?'':'none';
-  document.getElementById('mDouban').href=`https://search.douban.com/book/subject_search?search_text=${encodeURIComponent(b.name)}&cat=1001`;
-  document.getElementById('mZlib').href=b.original?`https://1lib.sk/s/${encodeURIComponent(b.original)}?`:`https://1lib.sk/s/${encodeURIComponent(b.name)}?`;
+  const doubanEl=document.getElementById('mDouban');
+  doubanEl.href=b.doubanUrl||`https://search.douban.com/book/subject_search?search_text=${encodeURIComponent(b.name)}&cat=1001`;
+  doubanEl.textContent=b.doubanUrl?'在豆瓣查看丛书 →':'在豆瓣查看 →';
+  const zlibEl=document.getElementById('mZlib');
+  zlibEl.style.display=b.doubanUrl?'none':'';
+  zlibEl.href=b.original?`https://1lib.sk/s/${encodeURIComponent(b.original)}?`:`https://1lib.sk/s/${encodeURIComponent(b.name)}?`;
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow='hidden';
   const desc=document.getElementById('mDesc');
