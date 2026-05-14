@@ -386,6 +386,32 @@ h1 {
 
 #worldMap svg { display: block; width: 100%; }
 
+.zoom-controls {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
+.zoom-btn {
+  width: 28px;
+  height: 28px;
+  background: rgba(245,240,232,0.88);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+.zoom-btn:hover { background: #f5f0e8; }
+
 .map-note {
   font-size: 11px;
   color: var(--muted);
@@ -903,6 +929,7 @@ const DESCRIPTIONS = {
   '独自上场': '中国网球运动员李娜的传记。记录这位湖北姑娘如何从单飞争议到夺得法网冠军，以个人勇气对抗体制惯性，成为亚洲网球历史上最具影响力的运动员之一。',
   '攀岩人生': '美国攀岩家汤米·考德威尔的回忆录。讲述他如何在失去左手食指后仍完成酋长岩黎明墙首攀，以及在吉尔吉斯斯坦被武装分子劫持的生死历险与内心蜕变。',
   '创造自然': '传记作家安德里娅·武尔夫所著，讲述博物学家亚历山大·冯·洪堡的一生。洪堡是第一个提出"自然是相互联系的整体"的科学家，被达尔文、爱默生等人奉为精神导师。',
+  '我坦言我曾历尽沧桑': '诺贝尔文学奖得主聂鲁达的回忆录。以诗人的语言回溯其辗转亚洲、欧洲与拉丁美洲的外交与流亡岁月，是一部充满政治激情与抒情气质的自传。',
   '当你像鸟飞往你的山': '美国作家塔拉·韦斯特弗的回忆录。她在爱达荷州山区的末日主义家庭中长大，从未接受正规教育，却凭借自学考入大学，最终获得剑桥大学历史学博士学位。这是一部关于教育如何重塑自我、以及如何在家庭创伤中艰难脱身的深刻记录。',
 
   // ── 商业 ──────────────────────────────────────────
@@ -921,8 +948,12 @@ const DESCRIPTIONS = {
   // ── 政治·历史·地理 ────────────────────────────────
   '来自上层的革命：苏联体制的终结': '社会学家科勒曼挑战苏联解体的主流叙事，认为推倒苏联旧体制的，不是经济崩溃或民间压力，而是苏联内部占统治地位的党政精英主动选择了放弃。',
   '不需要的战争': '丘吉尔六卷本《第二次世界大战》回忆录。从凡尔赛条约到波茨坦会议，这位亲历者以政治家的视角记录一场他认为本可避免的浩劫，1953年荣获诺贝尔文学奖。',
+  '想象的共同体：民族主义的起源与散布': '民族主义研究的奠基之作。提出"民族"是借助印刷资本主义被想象出来的共同体，深刻解释了现代民族意识的起源与传播机制。',
+  '逃避统治的艺术：东南亚高地的无政府主义历史': '政治学家斯科特研究横跨东南亚大陆高地的"佐米亚"无国家地带，论证山地居民如何主动逃避平地国家的征税与控制，挑战"国家扩张即文明进步"的主流叙事。',
+  '图绘暹罗：一部国家地缘机体的历史': '探讨现代地图测绘如何重塑暹罗（今泰国）的国家疆域意识与民族认同，是理解东南亚民族国家形成机制的重要学术著作。',
   '为何国家会失败': '经济学家阿西莫格鲁与政治学家罗宾逊合著。提出"包容性制度vs.榨取性制度"的核心框架，解释为何制度，而非文化、地理或运气，才是国家兴衰的根本原因。',
   '苏联外宾商店：为了工业化所需的黄金': '记述苏联1930年代"外汇商店"（Torgsin）体系的历史研究。为换取工业化所需外汇，苏联允许国民以黄金换购食物，这一制度折射出大饥荒时期的悲剧逻辑。',
+  '阿拉伯─伊斯兰文化史（共八册）': '八册本阿拉伯─伊斯兰文明通史，涵盖阿拉伯世界伊斯兰国家的政治、经济、社会、文化、学术活动、教派发展等方面，是深入了解这一文明体系的重要参考书系。',
   '古拉格：一部历史': '安妮·阿普尔鲍姆的普利策奖著作。首次全面记录苏联劳改营体系从列宁时期兴起到斯大林时期膨胀的历史，以详实史料还原数百万囚犯的命运与制度暴力的运作机制。',
   '联邦党人文集': '汉密尔顿、麦迪逊、杰伊为推动美国宪法批准共同写就的政论文集。系统阐述三权分立、联邦制与共和政府的理论基础，是理解美国宪政设计的首要文献。',
   '论美国的民主': '法国政治学家托克维尔1835年考察美国后所著。以外来者的冷静目光剖析美国民主的运作机制、公民社会的力量与平等主义的潜在危险，预见性地分析了民主时代的未来。',
@@ -1005,6 +1036,9 @@ const DESCRIPTIONS = {
   '福楼拜作品': '法国作家古斯塔夫·福楼拜的作品。以《包法利夫人》开创现代写实主义，以"恰当词语"（le mot juste）为标准的写作美学，影响了此后整个欧洲乃至世界文学传统。',
 
   // ── 艺术/文化 ──────────────────────────────────────
+  '艺术的故事': '世界上最畅销的艺术史通俗读本。贡布里希以简洁流畅的笔触，从史前洞穴壁画到20世纪现代艺术，讲述人类何以创作、欣赏并理解艺术。',
+  '艺术哲学': '丹纳在法国美术学院的讲稿结集。提出"种族、环境、时代"三要素决定艺术风格的著名理论，将艺术史置于社会与自然环境的系统分析框架之中。',
+  '傅雷谈美术': '傅雷以二十讲形式解析世界美术名作，融汇中西审美眼光，从达·芬奇到伦勃朗，以文学性的语言引领读者进入绘画欣赏的深层境界。',
   '艺术与观念丛书': '每册聚焦一个艺术史核心议题——从古希腊罗马到印象派、从女性凝视到殖民主义。作者均为领域内知名学者，将作品置于具体的文化与思想背景中审视，兼顾学术深度与阅读趣味。',
   '世界名画家全集丛书': '每册专注一位画家，从文艺复兴跨越至20世纪，涵盖达·芬奇、伦勃朗、塞尚、毕加索等数十位艺术家。以生平年表、创作脉络与作品精析为结构，适合按画家或流派专题阅读。',
   '古希腊罗马艺术为什么重要': '艺术史家以问题为导向重新审视古典艺术遗产。探讨希腊罗马的雕塑、绘画与建筑如何持续塑造西方审美与文化价值观，适合对古典艺术感兴趣的普通读者入门。',
@@ -1062,6 +1096,7 @@ const DATA = [
         {subject:'汤米·考德威尔',    name:'攀岩人生',                   original:"The Push: A Climber's Journey of Endurance, Risk, and Going Beyond Limits"},
         {subject:'亚历山大·冯·洪堡', name:'创造自然',                   original:"The Invention of Nature: Alexander von Humboldt's New World"},
         {subject:'塔拉·韦斯特弗',   name:'当你像鸟飞往你的山',         original:'Educated: A Memoir'},
+        {subject:'巴勃罗·聂鲁达',   name:'我坦言我曾历尽沧桑',         original:'Confieso que he vivido'},
       ]},
     ]
   },
@@ -1113,6 +1148,9 @@ const DATA = [
         {name:'风暴之海：加勒比海五百年',                                original:'Sea of Storms: A History of Hurricanes in the Greater Caribbean',                        geo:[192,332,214,388,780]},
         {author:'阿庇安',   name:'罗马史',           original:'Roman History (Ρωμαϊκά)',                                                                                   geo:[380]},
         {author:'普鲁塔克', name:'古希腊罗马名人传', original:'Parallel Lives',                                                                                            geo:[380]},
+        {name:'阿拉伯─伊斯兰文化史（共八册）', doubanUrl:'https://book.douban.com/series/5084', geo:[682,368,364,760,818,724,504]},
+        {name:'图绘暹罗：一部国家地缘机体的历史', original:'Siam Mapped: A History of the Geo-Body of a Nation', geo:[764]},
+        {name:'逃避统治的艺术：东南亚高地的无政府主义历史', original:'The Art of Not Being Governed: An Anarchist History of Upland Southeast Asia', geo:[764,704,418,104,116]},
       ]},
       { title:'地理 · 人文', books:[
         {name:'渐行渐远古村落',                                                                                                                                             geo:[156]},
@@ -1130,6 +1168,7 @@ const DATA = [
       {name:'枪炮、病菌和钢铁',      original:'Guns, Germs, and Steel: The Fates of Human Societies'},
       {name:'为什么有的国家富裕，有的贫穷', original:'The Wealth and Poverty of Nations: Why Some Are So Rich and Some So Poor'},
       {name:'宏观经济学二十五讲'},
+      {name:'想象的共同体：民族主义的起源与散布', original:'Imagined Communities: Reflections on the Origin and Spread of Nationalism'},
     ]
   },
   {id:'philosophy', title:'哲学', emoji:'🤔',
@@ -1191,6 +1230,9 @@ const DATA = [
       {name:'论摄影',             original:'On Photography'},
       {name:'哈佛非虚构写作课',     original:'Telling True Stories: A Nonfiction Writers\' Guide from the Nieman Foundation at Harvard University'},
       {name:'外国文化名人自画像'},
+      {name:'艺术的故事',   original:'The Story of Art'},
+      {name:'艺术哲学',     original:'Philosophie de l\'art'},
+      {name:'傅雷谈美术'      },
       {name:'艺术与观念丛书', doubanUrl:'https://book.douban.com/series/45454'},
       {name:'世界名画家全集丛书', doubanUrl:'https://book.douban.com/series/156'},
     ]
@@ -1245,7 +1287,9 @@ const GEO_LABELS = {
   214:'多米尼加共和国',388:'牙买加',             780:'特立尼达和多巴哥',
   356:'印度',         528:'荷兰',                56:'比利时',
   442:'卢森堡',       804:'乌克兰',             818:'埃及',
-  156:'中国',          76:'巴西',                32:'阿根廷',
+  156:'中国',          158:'台湾',               76:'巴西',                32:'阿根廷',
+  682:'沙特阿拉伯',   368:'伊拉克',             364:'伊朗',              760:'叙利亚',   504:'摩洛哥',
+  764:'泰国',         704:'越南',               418:'老挝',              104:'缅甸',
   152:'智利',         604:'秘鲁',               218:'厄瓜多尔',
   862:'委内瑞拉',     170:'哥伦比亚',           484:'墨西哥',
   558:'尼加拉瓜',     340:'洪都拉斯',           320:'危地马拉',
@@ -1346,9 +1390,12 @@ function switchGeoView(view, btn) {
   if (view==='map') { mv.classList.remove('hidden'); lv.classList.add('hidden'); initWorldMap(); }
   else { closeTT(); mv.classList.add('hidden'); lv.classList.remove('hidden'); }
 }
-let mapReady = false, activeFid = null, mapSvg = null;
+let mapReady = false, activeFid = null, mapSvg = null, mapZoom = null, mapG = null;
+const GEO_ALIAS = {158: 156}; // Taiwan → China (visual alias only)
+const resolveGeo = id => GEO_DATA[id] ? id : (GEO_ALIAS[id] && GEO_DATA[GEO_ALIAS[id]] ? GEO_ALIAS[id] : null);
 const bookCountOf = id => GEO_DATA[id]?.books?.length || 0;
-const baseOp = id => GEO_DATA[id] ? Math.min(0.48 + bookCountOf(id)*0.12, 0.9) : 0.82;
+const baseOp = id => { const r = resolveGeo(id); return r ? Math.min(0.48 + bookCountOf(r)*0.12, 0.9) : 0.82; };
+function zoomMap(factor) { if (mapSvg && mapZoom) mapSvg.transition().duration(300).call(mapZoom.scaleBy, factor); }
 async function initWorldMap() {
   if (mapReady) return;
   try {
@@ -1358,36 +1405,49 @@ async function initWorldMap() {
     el.innerHTML = '';
     const W = el.clientWidth || 840, H = Math.round(W * 0.50);
     mapSvg = d3.select(el).append('svg').attr('viewBox',`0 0 ${W} ${H}`).attr('width','100%').style('display','block');
-    mapSvg.append('rect').attr('width',W).attr('height',H).attr('fill','#8fb8c6').attr('opacity',.55).style('cursor','default').on('click', () => closeTT());
+    mapZoom = d3.zoom().scaleExtent([1, 8]).on('zoom', e => mapG.attr('transform', e.transform));
+    mapSvg.call(mapZoom);
+    mapG = mapSvg.append('g');
+    mapG.append('rect').attr('width',W).attr('height',H).attr('fill','#8fb8c6').attr('opacity',.55).style('cursor','default').on('click', () => closeTT());
+    const zoomDiv = document.createElement('div');
+    zoomDiv.className = 'zoom-controls';
+    zoomDiv.innerHTML = '<button class="zoom-btn" onclick="zoomMap(1.6)" title="放大">+</button><button class="zoom-btn" onclick="zoomMap(1/1.6)" title="缩小">−</button>';
+    document.getElementById('mapWrap').appendChild(zoomDiv);
     const proj = d3.geoNaturalEarth1().scale(W/6.28).translate([W/2, H/2]);
     const pathGen = d3.geoPath().projection(proj);
     const features = topojson.feature(world, world.objects.countries).features;
-    mapSvg.selectAll('.country').data(features).join('path')
+    mapG.selectAll('.country').data(features).join('path')
       .attr('class','country').attr('d', pathGen)
-      .attr('fill', d => GEO_DATA[+d.id] ? 'var(--accent)' : 'var(--paper-dark)')
+      .attr('fill', d => resolveGeo(+d.id) ? 'var(--accent)' : 'var(--paper-dark)')
       .attr('fill-opacity', d => baseOp(+d.id))
       .attr('stroke','rgba(255,255,255,0.6)').attr('stroke-width',0.4)
-      .style('cursor', d => GEO_DATA[+d.id] ? 'pointer' : 'default')
+      .style('cursor', d => resolveGeo(+d.id) ? 'pointer' : 'default')
       .on('mouseenter', function(event,d) {
-        if (!GEO_DATA[+d.id]) return;
-        d3.select(this).attr('fill-opacity', 0.95).attr('stroke-width', 0.9);
+        const rid = resolveGeo(+d.id);
+        if (!rid) return;
+        mapG.selectAll('.country').filter(d2 => resolveGeo(+d2.id) === rid)
+          .attr('fill-opacity', 0.95).attr('stroke-width', 0.9);
       })
       .on('mouseleave', function(event,d) {
-        const id = +d.id;
-        if (!GEO_DATA[id]) return;
-        if (id !== activeFid) d3.select(this).attr('fill-opacity', baseOp(id)).attr('stroke-width', 0.4);
+        const rid = resolveGeo(+d.id);
+        if (!rid) return;
+        if (rid !== activeFid) mapG.selectAll('.country').filter(d2 => resolveGeo(+d2.id) === rid)
+          .attr('fill-opacity', d2 => baseOp(+d2.id)).attr('stroke-width', 0.4);
       })
       .on('click', function(event,d) {
         event.stopPropagation();
-        const id = +d.id, data = GEO_DATA[id];
-        if (!data) return;
-        if (activeFid === id) {
-          d3.select(this).attr('fill-opacity', baseOp(id)).attr('stroke-width', 0.4);
+        const rid = resolveGeo(+d.id);
+        if (!rid) return;
+        const data = GEO_DATA[rid];
+        if (activeFid === rid) {
+          mapG.selectAll('.country').filter(d2 => resolveGeo(+d2.id) === rid)
+            .attr('fill-opacity', d2 => baseOp(+d2.id)).attr('stroke-width', 0.4);
           activeFid = null; hideTT();
         } else {
           if (activeFid !== null) resetCountry(activeFid);
-          activeFid = id;
-          d3.select(this).attr('fill-opacity', 0.95).attr('stroke-width', 0.9);
+          activeFid = rid;
+          mapG.selectAll('.country').filter(d2 => resolveGeo(+d2.id) === rid)
+            .attr('fill-opacity', 0.95).attr('stroke-width', 0.9);
           showTT(event, data);
         }
       });
@@ -1397,10 +1457,9 @@ async function initWorldMap() {
   }
 }
 function resetCountry(fid) {
-  if (!mapSvg) return;
-  mapSvg.selectAll('.country').each(function(d) {
-    if (+d.id === fid) d3.select(this).attr('fill-opacity', baseOp(fid)).attr('stroke-width', 0.4);
-  });
+  if (!mapG) return;
+  mapG.selectAll('.country').filter(d => resolveGeo(+d.id) === fid)
+    .attr('fill-opacity', d => baseOp(+d.id)).attr('stroke-width', 0.4);
 }
 function showTT(event, data) {
   const tt = document.getElementById('mapTooltip');
